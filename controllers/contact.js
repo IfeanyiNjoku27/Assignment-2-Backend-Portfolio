@@ -3,12 +3,14 @@ const Contact = require('../models/contacts');
 //Get all contacts
 module.exports.getAll = async function (req, res, next) {
 
+  //Get all from DB and then send a reponse
     try {
-        const contacts = await Contact.find();
-        res.json(contacts);
+        const contactsList = await Contact.find();
+        res.json(contactsList);
 
     }  catch (err) {
-        next(err);
+      console.log(err);
+      next(err);
     }
 };
 
@@ -16,46 +18,75 @@ module.exports.getAll = async function (req, res, next) {
 module.exports.getById = async function (req, res, next) {
 
     try {
-        const contact = await Contact.findById(req.params.id);
+      //Find contact using id sent in the paramater of the request
+        const contact = await Contact.findById({_id: req.params.id});
 
         if(!contact) return res.status(404).json({message: 'Contact not found'});
-        res.json(contact)
+        res.json(contact);
         
     } catch (err) {
-        next(err)
+      console.log(err);
+      next(err);
     }
     
 }
 
-//Create new contact 
+//Add new contact 
 model.exports.create = async function (req, res, next) {
     
     try {
         const contact = await Contact.create(req.body);
-        res.status(201).json(newContact);
+        console.log("Contact: " + contact)
+  
+        //Send a response
+        res.status(201).json({
+          success: true,
+          message: "Contact created sucessfully",
+          id: contact._id
+        });
 
     } catch (err) {
-        next(err);
+      console.log(err);
+      next(err);
     }
 };
 
 //update contact by id
 exports.update = async (req, res, next) => {
+
   try {
     const updated = await Contact.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!updated) return res.status(404).json({ message: 'Contact not found' });
-    res.json(updated);
+
+  if (!updated) {
+    return res.status(404).json({
+      success: false,
+      message: 'Contact not updated. Are you sure it exists?',
+    });
+
+} else {
+  return res.status(200).json({
+    success: true,
+    message: 'Contact updated sucessfully',
+    data: updated,
+  });
+}
+
   } catch (err) {
     next(err);
   }
-};
+}
 
 //remove contact by id
 exports.delete = async (req, res, next) => {
   try {
     const deleted = await Contact.findByIdAndDelete(req.params.id);
+
     if (!deleted) return res.status(404).json({ message: 'Contact not found' });
-    res.json({ message: 'Contact deleted successfully' });
+    res.json({
+      success: true,
+      message: 'Contact deleted successfully' 
+    });
+    
   } catch (err) {
     next(err);
   }
