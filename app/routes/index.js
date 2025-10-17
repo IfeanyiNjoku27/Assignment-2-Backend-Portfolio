@@ -1,8 +1,6 @@
-module.exports.home = function(req, res, next){
+var router = require('express').Router();
+var indexController = require('../controllers/index');
 
-    let messageObj = {
-        message: "Welcome to My Portfolio Application"
-    }
+router.get('/', indexController.home)
 
-    res.json(messageObj);
-}
+module.exports = router;

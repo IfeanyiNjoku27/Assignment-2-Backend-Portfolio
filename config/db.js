@@ -7,10 +7,10 @@ module.exports = function() {
 
     let mongob = mongoose.connection;
 
-    mongodb.on('error', console.error.bind(console, 'Connection Error: '));
-    mongodb.once('open', ()=>{
+    mongob.on('error', console.error.bind(console, 'Connection Error: '));
+    mongob.once('open', ()=>{
         console.log('====> Connected to MongoDB.');
     })
 
-    return mongodb;
+    return mongob;
 }
