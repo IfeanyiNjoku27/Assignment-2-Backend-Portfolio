@@ -1,7 +1,7 @@
 const Contact = require('../models/contacts');
 
 //Get all contacts
-module.exports.getAll = async function (req, res, next) {
+exports.getAll = async function (req, res, next) {
 
   //Get all from DB and then send a reponse
     try {
@@ -9,34 +9,31 @@ module.exports.getAll = async function (req, res, next) {
         res.json(contactsList);
 
     }  catch (err) {
-      console.log(err);
       next(err);
     }
 };
 
 //Get contact by id
-module.exports.getById = async function (req, res, next) {
+exports.getById = async function (req, res, next) {
 
     try {
       //Find contact using id sent in the paramater of the request
-        const contact = await Contact.findById({_id: req.params.id});
+        const contact = await Contact.findById(req.params.id);
 
         if(!contact) return res.status(404).json({message: 'Contact not found'});
         res.json(contact);
         
     } catch (err) {
-      console.log(err);
       next(err);
     }
     
 }
 
 //Add new contact 
-model.exports.create = async function (req, res, next) {
+exports.create = async function (req, res, next) {
     
     try {
         const contact = await Contact.create(req.body);
-        console.log("Contact: " + contact)
   
         //Send a response
         res.status(201).json({
@@ -46,7 +43,6 @@ model.exports.create = async function (req, res, next) {
         });
 
     } catch (err) {
-      console.log(err);
       next(err);
     }
 };
@@ -86,7 +82,7 @@ exports.delete = async (req, res, next) => {
       success: true,
       message: 'Contact deleted successfully' 
     });
-    
+
   } catch (err) {
     next(err);
   }
