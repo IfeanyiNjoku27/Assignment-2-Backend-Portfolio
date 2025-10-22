@@ -1,7 +1,9 @@
+require('dotenv').config();
 var express = require('express');
 var createError = require('http-errors');
 var logger = require('morgan');
 var cors = require('cors');
+
 
 var db = require('./config/db');
 
@@ -52,6 +54,4 @@ app.use(function(err, req, res, next) {
 
 // Initialize the server
 var port = process.env.PORT || 3000;
-app.listen(port);
-
-console.log(`Server running at http://localhost:${port}/`);
+app.listen(port, () => console.log(`Server running at http://localhost:${port}/`));
