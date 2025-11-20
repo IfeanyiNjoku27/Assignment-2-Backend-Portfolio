@@ -8,11 +8,13 @@ const ContactSchema = new Schema({
         type: String,
         unique: true,
         match: [/.+\@.+\..+/, "Please fill a valid e-mail address"]
-    }
+    },
+    message: String,
 });
 
 //Ensure virtual fields are serialized 
 ContactSchema.set('toJSON', {
+    virtuals: true,
     versionKey:false,
     transform: function (doc, ret) {
         delete ret._id;
