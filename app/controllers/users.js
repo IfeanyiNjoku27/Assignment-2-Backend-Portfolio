@@ -27,10 +27,11 @@ exports.getById = async (req, res, next) => {
 // Add new user
 exports.create = async (req, res, next) => {
   try {
+    console.log("Creating user: ", req.body.email);
+
     if (req.body.password) {
       req.body.password = await bycrypt.hash(req.body.password, 10);
     }
-
     const user = await User.create(req.body);
 
     res.status(201).json({
@@ -47,7 +48,7 @@ exports.create = async (req, res, next) => {
 exports.signin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email: req.body.email });
+    const user = await User.findOne({ email });
 
     if (!user) {
       return res
@@ -62,18 +63,20 @@ exports.signin = async (req, res, next) => {
         .json({ sucess: false, message: "Auth failed. Wrong password" });
     }
 
-    const token = jwt.signin({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    const token = jwt.signin(
+      { userId: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1h",
+      }
+    );
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "Auth Sucessful",
-        token: token,
-        user: { id: user._id, name: user.firstname },
-      });
+    res.status(200).json({
+      success: true,
+      message: "Auth Sucessful",
+      token: token,
+      user: { id: user._id, name: user.firstname },
+    });
   } catch (error) {
     next(error);
   }
