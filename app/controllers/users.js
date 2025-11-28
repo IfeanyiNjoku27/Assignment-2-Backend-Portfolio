@@ -63,7 +63,7 @@ exports.signin = async (req, res, next) => {
         .json({ sucess: false, message: "Auth failed. Wrong password" });
     }
 
-    const token = jwt.signin(
+    const token = jwt.sign(
       { userId: user._id, email: user.email },
       process.env.JWT_SECRET,
       {
