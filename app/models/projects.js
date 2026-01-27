@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 const projectSchema = new Schema(
     {
         title: {
-            title: String,
-            required: 'Title is required',
+            type: String,
+            required: true,
             trim: true
         },
         // To make URL friendly, human readable, and cleaner
@@ -19,7 +19,7 @@ const projectSchema = new Schema(
         },
         description: {
             type: String,
-            required: 'Description is required',
+            required: true,
             trim: true
         },
         tags: [{
